@@ -14,7 +14,7 @@ https://github.com/user-attachments/assets/071601bf-771c-4a2c-b402-cb3ffc48688b
 
 ## Usage
 
-Make sure you've set your anthropic api key: `export ANTHROPIC_API_KEY="your_api_key_here".
+Make sure you've set your anthropic api key: `export ANTHROPIC_API_KEY="your_api_key_here`.
 
 To run the script, we recommend using [uv](https://docs.astral.sh/uv/getting-started/installation/), because it automatically installs the dependencies in an isolated virtual environment:
 
