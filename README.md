@@ -1,70 +1,76 @@
 # LLMFix
+> Transform any selected text with AI instantly - no copy-paste, no app switching, just select and fix
 
-Transform selected text with AI using customizable command codes and hotkeys.
+## Get Started
 
-https://github.com/user-attachments/assets/071601bf-771c-4a2c-b402-cb3ffc48688b
+You write text all day, but fixing tone, clarity, or typos means switching apps and losing flow. LLMFix solves this: select any text anywhere on your Mac, hit a hotkey, and watch it transform instantly.
 
-## Features
+**Prerequisites**: Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-1. **Global Hotkey**: Trigger text transformations from anywhere with a keyboard shortcut (default is `cmd + shift + option + ctrl + f`, no I'm not crazy, keep reading)
-2. **Command Codes**: Use shorthand codes to apply specific transformations (e.g. //CC for clear and concise, //FF for friendly and informal)
-3. **Non-Intrusive**: Works with your clipboard without disrupting its contents
-4. **Menu Bar App**: Simple status indicator in your menu bar
-5. **Customizable**: This app is just a single python file, so you can customize it to your liking.
+1. **Clone and setup**:
+   ```bash
+   git clone https://github.com/AnswerDotAI/llmfix.git
+   cd llmfix
+   export ANTHROPIC_API_KEY="your_api_key_here"
+   chmod +x llmfix.py
+   ```
 
-## Usage
+2. **Run the app**: `./llmfix.py`
 
-Make sure you've set your anthropic api key: `export ANTHROPIC_API_KEY="your_api_key_here`.
+3. **Grant permissions**: When prompted, go to `System Preferences → Security & Privacy → Input Monitoring` and add your terminal app
 
-To run the script, we recommend using [uv](https://docs.astral.sh/uv/getting-started/installation/), because it automatically installs the dependencies in an isolated virtual environment:
+4. **Test it**: 
+   - Type "Would you please be so kind and try this out //FF" in any text field
+   - Select the text and click the 'L' icon in your menu bar, then select "Fix"
+   - Your text becomes something like: "Hey, give this a try!"
 
-```bash
-uv run llmfix.py
+## Next Steps
+
+### Master the keyboard shortcut
+
+The default hotkey is `cmd+shift+alt+ctrl+f`. This complex combination prevents conflicts with other apps. 
+
+**Pro tip**: Remap caps lock to `cmd+shift+alt+ctrl` using [Karabiner Elements](https://karabiner-elements.pqrs.org/) - then you can trigger fixes with just `capslock+f`.
+
+### Use built-in commands
+
+Add these codes to any text for useful transformations:
+- `//CC` - Make text clear and concise
+- `//FF` - Make text friendly and informal  
+- `//BLUF` - Put the bottom line up front
+- `//DOH` - Fix typos and spelling mistakes
+- `//MD` - Transform to markdown format
+
+### Create custom commands
+
+Any text after `//` becomes a command. Try:
+
+```
+Hi Squidward how's it going? // MAKE SPONGEBOB CASE
 ```
 
-You might get prompted with "This process is not trusted! Input event monitoring will not be possible until it is added to accessibility clients." You can add it by going to `System Preferences -> Security & Privacy -> Input Monitoring` and adding the terminal app you've used to run this script.
+Result: `hI sQuIdWaRd HoW's It GoInG?`
 
-After succesfully running the script, you should see a new 'L' icon in your menu bar.
-Now write some text for example "hey check this out // make it formal", select the text, and press the 'Fix' button in the toolbar menu or use the global keyboard shortcut.
+### Customize the app
 
-## Customizing the app
+**Change the hotkey**  you can change the hotkey by editing the `on_press` method.
 
-The app is just a single python file, so you can customize it to your liking.
-
-### Customizing the keyboard shortcut
-
-To change the hotkey, you can change the `KEYBOARD_SHORTCUT` variable in the script.
-
-### Customizing the command codes
-
-To change the command codes, you can change the `COMMAND_CODES` dictionary in the script.
-The default command codes are:
+**Add preset commands** you can add preset commands by editing the `COMMAND_CODES` dictionary:
 
 ```python
 COMMAND_CODES = {
-    "//CC": "// edit to be clear and concise",
-    "//FF": "// edit to be friendly and informal",
-    "//BLUF": "// edit to bring the bottom line to the front",
-    "//DOH": "// edit to fix typo's and spelling mistakes",
-    "//MD": "// transform to markdown",
+    ...
+    "//FORMAL": "// make this more professional",
+    "//ELI5": "// explain like I'm 5 years old",
 }
 ```
 
-## Anticipated FAQ
 
-### Why are you using cmd+shift+option+ctrl+f as a keyboard shortcut?
-I like to remap my capslock to the combination of `cmd+shift+option+ctrl` so I can make custom hotkeys that never conflict with any other app. On MacOS, you can set this up with apps like [Karabiner Elements](https://karabiner-elements.pqrs.org/) or [HyperKey](https://hyperkey.app/).
+## FAQ
 
-### Is it Mac only?
-Yes. LLMFix uses [rumps](https://github.com/jaredks/rumps) for the menu bar app functionality. But you can remove that and then it would be cross-platform. The core functionality, supported by [pynput](https://github.com/moses-palmer/pynput) would work on Linux and Windows as well.
+**Mac only?** Yes, but you can modify it for other platforms by replacing the rumps menu bar functionality.
 
-### Is it Claude only?
-Yes. But feel free to replace the `llm` function with another one. You can even use local models as the task of rewriting text is something that most small/medium sized models can easily do.
+**Claude only?** Yes, but you can swap the `llm` function for any other model or API.
 
-### Are you going to put this on PyPI?
-No. I've written this app three times. Once in swift, but distributing an app in the app store was too much hassle. Second as a pypi package, but even then the friction to publish it was too large. Now, I'm finally just sharing it as a script. Did you know you don't even have to clone the repo. You can even run it from the raw url:
-
-```bash
-uv run https://raw.githubusercontent.com/answerdotai/llmfix/refs/heads/main/llmfix.py
-```
+**Why the complex hotkey?** It ensures no conflicts with existing app shortcuts. Much easier with caps lock remapped!
 

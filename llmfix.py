@@ -1,3 +1,4 @@
+#!/usr/bin/env -S uv run 
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
@@ -14,40 +15,32 @@ import pyperclip
 from claudette import Chat
 import threading
 
-KEYBOARD_SHORTCUT = "<cmd>+<shift>+<alt>+<ctrl>+f"
+keyboard = Controller()
+
 COMMAND_CODES = {
     "//CC": "// edit to be clear and concise",
     "//FF": "// edit to be friendly and informal",
-    "//BLUF": "// edit to bring the bottom line to the front",
+    "//BLUF": "// edit to bring the bottom line upfront",
     "//DOH": "// edit to fix typo's and spelling mistakes",
     "//MD": "// transform to markdown",
 }
 
-
 def replace_all(text, replacements):
-    for old, new in replacements.items():
-        text = text.replace(old, new)
+    for old, new in replacements.items(): text = text.replace(old, new)
     return text
 
-
 def llm(inp: str):
-    return (
-        Chat("claude-3-5-haiku-20241022")(
+    return Chat("claude-3-5-haiku-20241022")(
             f"""        
-Below is the text a user copied to their clipboard. It contains a mix of text and instructions for you to fix. Apply the fixes and return only the text that the user should see. It will be applied to their clipboard so they can paste it. if the user says something like // DO THIS you can be sure it's an instruction.
+Below is the text a user copied to their clipboard. It contains a mix of text and instructions for you to fix. 
+Apply the fixes and return only the text that the user should see. It will be applied to their clipboard so they can paste it. 
+If the user says something like // DO THIS you can be sure it's an instruction.
 RETURN ONLY THE OUTPUT, NO YAPPING. NO PREAMBLE NO SIGN OFF.
 <user text>
 {replace_all(inp, COMMAND_CODES)}
 </user text>
 """.strip()
-        )
-        .content[0]
-        .text
-    )
-
-
-keyboard = Controller()
-
+        ).content[0].text
 
 class HotkeyListener:
     def __init__(self, fix_callback):
@@ -68,7 +61,6 @@ class HotkeyListener:
             
     def on_press(self, key):
         self.pressed_keys.add(key)
-        # Check for the hotkey combination: cmd+shift+alt+ctrl+f
         if (Key.cmd in self.pressed_keys and 
             Key.shift in self.pressed_keys and 
             Key.alt in self.pressed_keys and 
@@ -80,7 +72,6 @@ class HotkeyListener:
     def on_release(self, key):
         self.pressed_keys.discard(key)
 
-
 class ToolbarApp(rumps.App):
     def __init__(self):
         super().__init__("App")
@@ -89,12 +80,10 @@ class ToolbarApp(rumps.App):
         
     def run(self):
         self.hotkey_listener.start()
-        try:
-            super().run()
-        finally:
-            self.hotkey_listener.stop()
+        try: super().run()
+        finally: self.hotkey_listener.stop()
 
-    @rumps.clicked(f"Fix ({KEYBOARD_SHORTCUT})")
+    @rumps.clicked(f"Fix")
     def fix(self, _=None):
         self.title = "..."
         old_clipboard = pyperclip.paste()
@@ -110,7 +99,6 @@ class ToolbarApp(rumps.App):
 
         pyperclip.copy(old_clipboard)
         self.title = "L"
-
 
 if __name__ == "__main__":
     app = ToolbarApp()
