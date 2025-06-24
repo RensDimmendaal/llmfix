@@ -23,6 +23,7 @@ COMMAND_CODES = {
     "//BLUF": "// edit to bring the bottom line upfront",
     "//DOH": "// edit to fix typo's and spelling mistakes",
     "//MD": "// transform to markdown",
+    "//FS": "// make fastai style. concise, short var names, as much on one line as possible, but no `;`. Dont add ``python codefence.",
 }
 
 def replace_all(text, replacements):
@@ -57,7 +58,7 @@ class HotkeyListener:
             
     def on_press(self, key):
         self.pressed_keys.add(key)
-        if (Key.cmd in self.pressed_keys and Key.ctrl in self.pressed_keys and hasattr(key, 'char') and key.char == 'j'):
+        if (Key.cmd in self.pressed_keys and Key.ctrl in self.pressed_keys and Key.shift in self.pressed_keys and Key.alt in self.pressed_keys and hasattr(key, 'char') and key.char == 'f'):
             threading.Thread(target=self.fix_callback, daemon=True).start()
             
     def on_release(self, key): self.pressed_keys.discard(key)
@@ -83,7 +84,7 @@ class ToolbarApp(rumps.App):
         time.sleep(0.1)
         if inp := pyperclip.paste():
             pyperclip.copy(llm(inp))
-        with keyboard.pressed(Key.cmd):
+        with keyboard.pressed(Key.cmd, Key.alt, Key.shift):
             keyboard.tap("v")
         time.sleep(0.1)
 
