@@ -20,15 +20,20 @@ You write text all day, but fixing tone, clarity, or typos means switching apps 
 3. **Run the app**: `./llmfix.py`
 
 4. **Test it**: 
-   - Type "Hi Squidward how's it going? // MAKE SPONGEBOB CASE" in any text field
+   - Type in any text field: "Hi Squidward how's it going? // MAKE SPONGEBOB CASE"
    - Select the text and click the 'L' icon in your menu bar, then select "Fix", or use the hotkey `cmd+ctrl+j`
    - Your text becomes something like: "hI sQuIdWaRd HoW's It GoInG?"
 
+Success! You can now use LLMFix to fix your text.
+
 ## Next Steps
+
+Try out these additional features:
 
 ### Use built-in commands
 
 Add these codes to any text for useful transformations:
+
 - `//CC` - Make text clear and concise
 - `//FF` - Make text friendly and informal  
 - `//BLUF` - Put the bottom line up front
@@ -41,7 +46,7 @@ You can customize the commands by editing the `COMMAND_CODES` dictionary in the 
 
 You can change the hotkey by editing the `on_press` method in the `llmfix.py` file.
 
-Pro tip: remap caps lock to `cmd+shift+alt+ctrl` using [Karabiner Elements](https://karabiner-elements.pqrs.org/) - then you can trigger fixes with just `capslock+<letter>`.
+**Pro tip:** remap caps lock to `cmd+shift+alt+ctrl` using [Karabiner Elements](https://karabiner-elements.pqrs.org/) - then you can trigger fixes with just `capslock+<letter>`.
 Then your hotkey is not only easier to use, but also less likely to conflict with other apps.
 
 ```python
