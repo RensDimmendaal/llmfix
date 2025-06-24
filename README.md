@@ -17,7 +17,7 @@ You write text all day, but fixing tone, clarity, or typos means switching apps 
 
 2. **Run the app**: `./llmfix.py`
 
-3. **Grant permissions**: When prompted, go to `System Preferences → Security & Privacy → Input Monitoring` and add your terminal app
+3. **Grant permissions**: When prompted, go to `System Preferences → Security & Privacy → Accessibility` and add your terminal app
 
 4. **Test it**: 
    - Type "Would you please be so kind and try this out //FF" in any text field
