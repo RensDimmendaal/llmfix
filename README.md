@@ -9,7 +9,7 @@ You write text all day, but fixing tone, clarity, or typos means switching apps 
 
 1. **Clone and setup**:
    ```bash
-   git clone https://github.com/AnswerDotAI/llmfix.git
+   git clone git@github.com:AnswerDotAI/llmfix.git
    cd llmfix
    export ANTHROPIC_API_KEY="your_api_key_here"
    chmod +x llmfix.py
