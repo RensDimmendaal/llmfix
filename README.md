@@ -15,7 +15,7 @@ You write text all day, but fixing tone, clarity, or typos means switching apps 
    chmod +x llmfix.py
    ```
 
-2. **Grant permissions**: When prompted, go to `System Preferences → Security & Privacy → Accessibility` and add your terminal app
+2. **Grant permissions**: Go to `System Preferences → Security & Privacy → Accessibility` and add your terminal app
 
 3. **Run the app**: `./llmfix.py`
 
