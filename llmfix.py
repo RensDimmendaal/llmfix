@@ -84,7 +84,7 @@ class ToolbarApp(rumps.App):
         time.sleep(0.1)
         if inp := pyperclip.paste():
             pyperclip.copy(llm(inp))
-        with keyboard.pressed(Key.cmd, Key.alt, Key.shift):
+        with keyboard.pressed(Key.cmd):
             keyboard.tap("v")
         time.sleep(0.1)
 
