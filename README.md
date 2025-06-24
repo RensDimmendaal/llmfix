@@ -20,17 +20,11 @@ You write text all day, but fixing tone, clarity, or typos means switching apps 
 3. **Grant permissions**: When prompted, go to `System Preferences → Security & Privacy → Accessibility` and add your terminal app
 
 4. **Test it**: 
-   - Type "Would you please be so kind and try this out //FF" in any text field
-   - Select the text and click the 'L' icon in your menu bar, then select "Fix"
-   - Your text becomes something like: "Hey, give this a try!"
+   - Type "Hi Squidward how's it going? // MAKE SPONGEBOB CASE" in any text field
+   - Select the text and click the 'L' icon in your menu bar, then select "Fix", or use the hotkey `cmd+ctrl+j`
+   - Your text becomes something like: "hI sQuIdWaRd HoW's It GoInG?"
 
 ## Next Steps
-
-### Master the keyboard shortcut
-
-The default hotkey is `cmd+shift+alt+ctrl+f`. This complex combination prevents conflicts with other apps. 
-
-**Pro tip**: Remap caps lock to `cmd+shift+alt+ctrl` using [Karabiner Elements](https://karabiner-elements.pqrs.org/) - then you can trigger fixes with just `capslock+f`.
 
 ### Use built-in commands
 
@@ -41,36 +35,29 @@ Add these codes to any text for useful transformations:
 - `//DOH` - Fix typos and spelling mistakes
 - `//MD` - Transform to markdown format
 
-### Create custom commands
+You can customize the commands by editing the `COMMAND_CODES` dictionary in the `llmfix.py` file.
 
-Any text after `//` becomes a command. Try:
+### Customize the hotkey
 
-```
-Hi Squidward how's it going? // MAKE SPONGEBOB CASE
-```
+You can change the hotkey by editing the `on_press` method in the `llmfix.py` file.
 
-Result: `hI sQuIdWaRd HoW's It GoInG?`
-
-### Customize the app
-
-**Change the hotkey**  you can change the hotkey by editing the `on_press` method.
-
-**Add preset commands** you can add preset commands by editing the `COMMAND_CODES` dictionary:
+Pro tip: remap caps lock to `cmd+shift+alt+ctrl` using [Karabiner Elements](https://karabiner-elements.pqrs.org/) - then you can trigger fixes with just `capslock+<letter>`.
+Then your hotkey is not only easier to use, but also less likely to conflict with other apps.
 
 ```python
-COMMAND_CODES = {
-    ...
-    "//FORMAL": "// make this more professional",
-    "//ELI5": "// explain like I'm 5 years old",
-}
+# Example of a more complex hotkey setup
+  if (Key.cmd in self.pressed_keys and 
+      Key.ctrl in self.pressed_keys and 
+      Key.shift in self.pressed_keys and 
+      Key.alt in self.pressed_keys and 
+      hasattr(key, 'char') and key.char == 'f'):
 ```
 
+### Bring your own LLM
 
-## FAQ
+If you don't like using Claude, you can change the `llm` function to use any other model or API.
 
-**Mac only?** Yes, but you can modify it for other platforms by replacing the rumps menu bar functionality.
 
-**Claude only?** Yes, but you can swap the `llm` function for any other model or API.
+### Make it work on other platforms
 
-**Why the complex hotkey?** It ensures no conflicts with existing app shortcuts. Much easier with caps lock remapped!
-
+This is a Mac only app. You can modify it for other platforms by replacing the rumps menu bar functionality. It's the only part that's platform specific.

@@ -49,28 +49,18 @@ class HotkeyListener:
         self.listener = None
         
     def start(self):
-        self.listener = Listener(
-            on_press=self.on_press,
-            on_release=self.on_release
-        )
+        self.listener = Listener(on_press=self.on_press, on_release=self.on_release)
         self.listener.start()
         
     def stop(self):
-        if self.listener:
-            self.listener.stop()
+        if self.listener: self.listener.stop()
             
     def on_press(self, key):
         self.pressed_keys.add(key)
-        if (Key.cmd in self.pressed_keys and 
-            Key.shift in self.pressed_keys and 
-            Key.alt in self.pressed_keys and 
-            Key.ctrl in self.pressed_keys and 
-            hasattr(key, 'char') and key.char == 'f'):
-            # Run the fix callback in a separate thread to avoid blocking
+        if (Key.cmd in self.pressed_keys and Key.ctrl in self.pressed_keys and hasattr(key, 'char') and key.char == 'j'):
             threading.Thread(target=self.fix_callback, daemon=True).start()
             
-    def on_release(self, key):
-        self.pressed_keys.discard(key)
+    def on_release(self, key): self.pressed_keys.discard(key)
 
 class ToolbarApp(rumps.App):
     def __init__(self):
