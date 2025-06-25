@@ -6,14 +6,16 @@
 #     "pynput",
 #     "pyperclip",
 #     "rumps",
+#     "pillow",
+#     "pyobjc",
 # ]
 # ///
-import rumps
+import rumps, time, pyperclip, threading, base64, subprocess, tempfile, os
 from pynput.keyboard import Key, Controller, Listener
-import time
-import pyperclip
 from claudette import Chat
-import threading
+from PIL import Image
+from io import BytesIO
+from Cocoa import NSScreen, NSEvent
 
 keyboard = Controller()
 
@@ -24,24 +26,62 @@ COMMAND_CODES = {
     "//DOH": "// edit to fix typo's and spelling mistakes",
     "//MD": "// transform to markdown",
     "//FS": "// make fastai style. concise, short var names, as much on one line as possible, but no `;`. Dont add ``python codefence.",
+    "//SS": "",  # Screenshot mode
 }
 
 def replace_all(text, replacements):
     for old, new in replacements.items(): text = text.replace(old, new)
     return text
 
+def resize_for_claude(img, max_pixels=1_150_000):
+    w, h = img.size
+    current_pixels = w * h
+    if current_pixels <= max_pixels: return img
+    ratio = (max_pixels / current_pixels) ** 0.5
+    new_w, new_h = int(w * ratio), int(h * ratio)
+    return img.resize((new_w, new_h), Image.LANCZOS)
+
+def img_to_base64(img):
+    buffer = BytesIO()
+    img.save(buffer, format='PNG')
+    return base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+def get_active_display():
+    screens, mouse_location = NSScreen.screens(), NSEvent.mouseLocation()
+    for i, screen in enumerate(screens):
+        frame = screen.frame()
+        if (frame.origin.x <= mouse_location.x <= frame.origin.x + frame.size.width and frame.origin.y <= mouse_location.y <= frame.origin.y + frame.size.height): return i + 1
+    return 1
+
+def capture_active_screen():
+    active_display = get_active_display()
+    fh, filepath = tempfile.mkstemp(".png")
+    os.close(fh)
+    subprocess.run(['screencapture', '-D', str(active_display), filepath])
+    img = Image.open(filepath)
+    img.load()
+    os.unlink(filepath)
+    return img
+
 def llm(inp: str):
-    return Chat("claude-3-5-haiku-20241022")(
-            f"""        
-Below is the text a user copied to their clipboard. It contains a mix of text and instructions for you to fix. 
-Apply the fixes and return only the text that the user should see. It will be applied to their clipboard so they can paste it. 
-If the user says something like // DO THIS you can be sure it's an instruction.
-RETURN ONLY THE OUTPUT, NO YAPPING. NO PREAMBLE NO SIGN OFF.
-<user text>
-{replace_all(inp, COMMAND_CODES)}
-</user text>
-""".strip()
-        ).content[0].text
+    prompt = (
+        "Below is the text a user copied to their clipboard along with a screenshot. "
+        "It contains a mix of text and instructions for you to fix. "
+        "Apply the fixes and return only the text that the user should see. "
+        "It will be applied to their clipboard so they can paste it. "
+        "If the user says something like // DO THIS you can be sure it's an instruction. "
+        "RETURN ONLY THE OUTPUT, NO YAPPING. NO PREAMBLE NO SIGN OFF.\n"
+        "<user text>\n"
+        f"{replace_all(inp, COMMAND_CODES)}\n"
+        "</user text>"
+    ).strip()
+    if "//SS" in inp:
+        screenshot = capture_active_screen()
+        resized = resize_for_claude(screenshot)
+        prompt= [dict(type="image", source=dict(type="base64", media_type="image/png", data=img_to_base64(resized))), dict(type="text", text=prompt)]
+        model = "claude-sonnet-4-20250514"
+    else: model = "claude-3-5-haiku-20241022"
+    return Chat(model)(prompt).content[0].text
 
 class HotkeyListener:
     def __init__(self, fix_callback):

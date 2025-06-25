@@ -42,6 +42,12 @@ Add these codes to any text for useful transformations:
 
 You can customize the commands by editing the `COMMAND_CODES` dictionary in the `llmfix.py` file.
 
+### Add screenshots
+
+If you add the `//SS` command, LLMFix captures a screenshot and uses it as additional context. 
+This can be useful when you have a text editor open alongside another file with relevant information. 
+If you have multiple monitors, then a screenshot of the monitor where your mouse is will be sent to llmfix.
+
 ### Customize the hotkey
 
 You can change the hotkey by editing the `on_press` method in the `llmfix.py` file.
@@ -65,4 +71,7 @@ If you don't like using Claude, you can change the `llm` function to use any oth
 
 ### Make it work on other platforms
 
-This is a Mac only app. You can modify it for other platforms by replacing the rumps menu bar functionality. It's the only part that's platform specific.
+This is a Mac only app. You can modify it for other platforms by:
+
+1. replacing the rumps menu bar functionality.
+2. replacing the screenshot functionality (we use mac specific features to detect active monitor).
