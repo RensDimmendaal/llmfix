@@ -57,7 +57,7 @@ def capture_active_screen():
     active_display = get_active_display()
     fh, filepath = tempfile.mkstemp(".png")
     os.close(fh)
-    subprocess.run(['screencapture', '-D', str(active_display), filepath])
+    subprocess.run(['screencapture', '-x', '-D', str(active_display), filepath])
     img = Image.open(filepath)
     img.load()
     os.unlink(filepath)
