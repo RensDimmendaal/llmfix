@@ -17,9 +17,12 @@ You write text all day, but fixing tone, clarity, or typos means switching apps 
 
 2. **Grant permissions**: Go to `System Preferences → Security & Privacy → Accessibility` and add your terminal app
 
-3. **Run the app**: `./llmfix.py`
+![image](https://github.com/user-attachments/assets/09c8ef78-01cf-4265-b1be-b82d9972069c)
 
-4. **Test it**: 
+
+4. **Run the app**: `./llmfix.py`
+
+5. **Test it**: 
    - Type in any text field: "Hi Squidward how's it going? // MAKE SPONGEBOB CASE"
    - Select the text and click the 'L' icon in your menu bar, then select "Fix", or use the hotkey `cmd+ctrl+j`
    - Your text becomes something like: "hI sQuIdWaRd HoW's It GoInG?"
