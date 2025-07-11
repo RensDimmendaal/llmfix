@@ -152,7 +152,7 @@ class ToolbarApp(rumps.App):
     def fix(self, _=None):
         log.info("Fix called")
         self.title = "..."
-        old = pyperclip.paste()
+        old = pyperclip.paste() or ""
         log.debug(f"Saved clipboard ({len(old)} chars)")
 
         log.debug("Copying with Cmd+C")
